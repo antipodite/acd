@@ -37,7 +37,9 @@ SELECT DISTINCT
 	lt.cldf_name as ACDName,
 	lt.cldf_glottocode as GlottoCode,
 	ct2.Proto_Language as ProtoLanguage,
-	COUNT(ft.cldf_form) OVER (PARTITION BY ct2.Form) as ReflexCount
+	COUNT(ft.cldf_form) OVER (PARTITION BY ct2.Form) AS ReflexCount,
+	lt.cldf_latitude AS Latitude,
+	lt.cldf_longitude AS Longitude
 FROM FormTable ft
 INNER JOIN LanguageTable lt on lt.cldf_id = ft.cldf_languageReference 
 INNER JOIN CognateTable ct on ct.cldf_formReference = ft.cldf_id
