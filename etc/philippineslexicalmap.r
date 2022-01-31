@@ -9,6 +9,7 @@ library(geometry)
 library(DescTools)
 library(dplyr)
 library(testit)
+library(ggforce)
 
 #### Data
 
@@ -51,15 +52,20 @@ abaka <- reflex_data[reflex_data$ProtoForm == "*abaká",]
 
 #### Helper functions
 
-build.isogloss <- function(df) {
+build.isogloss <- function(df, x.rad = 0.1, y.rad = 0.1) {
   #' Compute the convex hull of the set of language locations in
   #' the input dataframe. Hacky? I don't know R
   unique.points <- df[!duplicated(df[,c("Latitude", "Longitude")]),]
-  xrange <- range(na.omit(df$Longitude))
-  yrange <- range(na.omit(df$Latitude))
   xys <- na.omit(unique.points[c("Longitude", "Latitude")])
-  while (nrow(xys) < 3) { # Need at least 3 points for a cnvhull, so add random points at a sensible distance
-    xys <- rbind(xys, data.frame(Longitude=runif(1, xrange[1], xrange[2]), Latitude=runif(1, yrange[1], yrange[2])))
+  x.mean <- mean(xys$Longitude)
+  y.mean <- mean(xys$Latitude)
+  
+  ## Need at least 3 distinct points for a cnvhull, so add
+  ## random points at a sensible distance if not
+  while (nrow(xys) < 3 | Reduce(identical, xys$Latitude) | Reduce(identical, xys$Longitude)) {
+    rand.x <- runif(1, x.mean - x.rad, x.mean + x.rad)
+    rand.y <- runif(1, y.mean - y.rad, y.mean + y.rad)
+    xys <- rbind(xys, data.frame(Longitude=rand.x, Latitude=rand.y))
   }
   ## Convhulln returns hull vertices represented as pairs of row indices for input frame
   hull <- convhulln(xys)
@@ -99,10 +105,17 @@ example.map <- function() {
 }
 
 microgroups.map <- function() {
-  all.langs <- reflex_data |> distinct(ACDName, .keep_all = TRUE)
+  boundaries <- all.langs |>
+    group_by(Microgroup) |>
+    group_map(~ build.isogloss(.x)) |>
+    bind_rows(.id = "group")
+  
   ggplot(data = world) +
     geom_tile(data = elevation_data, aes(x = x, y = y, fill = elevation)) +
     scale_fill_viridis(direction = 1, option = "cividis") +
     coord_sf(xlim = ph.limits$x, ylim = ph.limits$y, expand=FALSE) +
+    ##geom_shape(data = boundaries, aes(x = Longitude, y = Latitude), radius = unit(0.5, 'cm'))
     geom_point(data = reflex_data, aes(x = Longitude, y = Latitude, color = factor(Microgroup)), size = 3, shape = 1)
 }
+
+
