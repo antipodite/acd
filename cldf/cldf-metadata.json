@@ -6,32 +6,15 @@
     "dc:isVersionOf": null,
     "dc:license": "https://creativecommons.org/licenses/by/4.0/",
     "dc:related": null,
+    "dc:source": "sources.bib",
     "dc:title": "CLDF dataset derived from Blust's \"Austronesian Comparative Dictionary\"",
     "dcat:accessURL": "https://github.com/lexibank/acd",
     "prov:wasDerivedFrom": [
         {
             "rdf:about": "https://github.com/lexibank/acd",
             "rdf:type": "prov:Entity",
-            "dc:created": "0dddc58",
+            "dc:created": "v1.1-6-gd307fb6",
             "dc:title": "Repository"
-        },
-        {
-            "rdf:about": "https://github.com/glottolog/glottolog",
-            "rdf:type": "prov:Entity",
-            "dc:created": "v4.4-23-gfb68e566c4",
-            "dc:title": "Glottolog"
-        },
-        {
-            "rdf:about": "https://github.com/concepticon/concepticon-data",
-            "rdf:type": "prov:Entity",
-            "dc:created": "v2.5.0",
-            "dc:title": "Concepticon"
-        },
-        {
-            "rdf:about": "https://github.com/cldf-clts/clts",
-            "rdf:type": "prov:Entity",
-            "dc:created": "v2.1.0-1-gec173ae",
-            "dc:title": "CLTS"
         }
     ],
     "prov:wasGeneratedBy": [
@@ -56,7 +39,7 @@
     "tables": [
         {
             "dc:conformsTo": "http://cldf.clld.org/v1.0/terms.rdf#FormTable",
-            "dc:extent": 146642,
+            "dc:extent": 146733,
             "tableSchema": {
                 "columns": [
                     {
@@ -167,7 +150,7 @@
         },
         {
             "dc:conformsTo": "http://cldf.clld.org/v1.0/terms.rdf#LanguageTable",
-            "dc:extent": 1062,
+            "dc:extent": 1063,
             "tableSchema": {
                 "columns": [
                     {
@@ -242,6 +225,8 @@
                     },
                     {
                         "datatype": "string",
+                        "propertyUrl": "http://cldf.clld.org/v1.0/terms.rdf#source",
+                        "separator": ";",
                         "name": "Source"
                     },
                     {
@@ -261,7 +246,7 @@
         },
         {
             "dc:conformsTo": "http://cldf.clld.org/v1.0/terms.rdf#ParameterTable",
-            "dc:extent": 86494,
+            "dc:extent": 86502,
             "tableSchema": {
                 "columns": [
                     {
@@ -293,7 +278,7 @@
         },
         {
             "dc:conformsTo": "http://cldf.clld.org/v1.0/terms.rdf#CognateTable",
-            "dc:extent": 116662,
+            "dc:extent": 116753,
             "tableSchema": {
                 "columns": [
                     {
@@ -372,6 +357,17 @@
                         ],
                         "reference": {
                             "resource": "cognatesets.csv",
+                            "columnReference": [
+                                "ID"
+                            ]
+                        }
+                    },
+                    {
+                        "columnReference": [
+                            "Reconstruction_ID"
+                        ],
+                        "reference": {
+                            "resource": "protoforms.csv",
                             "columnReference": [
                                 "ID"
                             ]
